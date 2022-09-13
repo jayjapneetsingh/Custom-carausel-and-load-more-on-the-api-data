@@ -1,15 +1,13 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <News-Api />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import NewsApi from '@/components/NewsApi.vue';
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    NewsApi
   }
 }
 </script>
