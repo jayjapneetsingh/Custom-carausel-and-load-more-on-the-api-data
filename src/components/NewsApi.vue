@@ -1,13 +1,13 @@
 <template>
     <div>
-
+<Top-News />
 
         <div class="wrap">
             <div class="search">
-                <input @change="onChange()" class="form-control" type="text" placeholder="What are you looking for?"
+                <input  @input="onChange()" class="form-control" type="text" placeholder="What are you looking for?"
                     v-model="searchbar">
 
-                <button type="submit" class="btn btn-success">
+                <button type="submit"   class="btn btn-success">
                     search
                 </button>
             </div>
@@ -21,12 +21,13 @@
                     <img :src="content.urlToImage" class="recipe-image">
                     <div class="card__icon"><i class="fas fa-bolt"></i></div>
                     <p class="card__exit"><i class="fas fa-times"></i></p>
-                    <a target="_blank" :href="content.url">Read More</a>
 
 
-                    <h2 class="card__title">{{content.title}}</h2>
+                    <h2 class="card__title">{{content.title.substring(0,100)}}</h2>
                     <p class="card__apply">
                         <a class="card__link" href="#">Apply Now <i class="fas fa-arrow-right"></i></a>
+                        <a target="_blank" :href="content.url" class="btn btn-success">Read More</a>
+
                     </p>
                 </div>
 
@@ -41,20 +42,24 @@
 
 import axios from "axios";
 import _ from 'lodash'
-
+import TopNews from '@/components/TopNews.vue';
 
 export default {
     name: "NewsApi",
+    components: {
+    TopNews,
+    
+},
     data() {
         return {
-            searchbar: null,
+            searchbar: '',
             articles: []
 
         }
     },
     methods: {
         onChange: _.debounce(async function () {
-            let filterdBlogs = await axios.get(`https://newsapi.org/v2/everything?q=tesla&from=2022-09-12&to=2022-09-12&sortBy=popularity&apiKey=ca7b8b07f01647a2a20dc31780387d53`)
+            let filterdBlogs = await axios.get(`https://newsapi.org/v2/everything?q=${this.searchbar}&from=2022-08-13&sortBy=publishedAt&apiKey=ca7b8b07f01647a2a20dc31780387d53`)
 
 
             this.articles = filterdBlogs.data.articles
@@ -116,7 +121,6 @@ body {
 .wrap {
     width: 30%;
     position: absolute;
-    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -167,6 +171,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    display: inline-flex;
 }
 
 .card {
@@ -174,6 +179,7 @@ body {
     padding: 20px;
     width: 500px;
     min-height: 200px;
+    display: inline;
 
     grid-template-rows: 20px 50px 1fr 50px;
     border-radius: 10px;
@@ -285,8 +291,10 @@ body {
 img,
 svg {
     /* vertical-align: middle; */
-    width: 310px;
+    width: 300px;
     margin: auto;
     margin: auto !important;
+    height: 300px;
+
 }
 </style>
