@@ -1,13 +1,13 @@
 <template>
     <div>
-<Top-News />
+        <Top-News />
 
         <div class="wrap">
             <div class="search">
-                <input  @input="onChange()" class="form-control" type="text" placeholder="What are you looking for?"
+                <input @input="onChange()" class="form-control" type="text" placeholder="What are you looking for?"
                     v-model="searchbar">
 
-                <button type="submit"   class="btn btn-success">
+                <button type="submit" class="btn btn-success">
                     search
                 </button>
             </div>
@@ -16,14 +16,14 @@
 
         <div class="main-container">
 
-            <div class="cards" v-for="content in articles" :key="content.id">
+            <div class="cards" v-for="content in visibleCompanies" :key="content.id">
                 <div class="card">
                     <img :src="content.urlToImage" class="recipe-image">
                     <div class="card__icon"><i class="fas fa-bolt"></i></div>
                     <p class="card__exit"><i class="fas fa-times"></i></p>
 
 
-                    <h2 class="card__title">{{content.title.substring(0,100)}}</h2>
+                    <h2 class="card__title">{{content.title}}</h2>
                     <p class="card__apply">
                         <a class="card__link" href="#">Apply Now <i class="fas fa-arrow-right"></i></a>
                         <a target="_blank" :href="content.url" class="btn btn-success">Read More</a>
@@ -33,6 +33,8 @@
 
             </div>
         </div>
+        <button @click="companiesVisibles" v-if="companiesVisible < articles.length">Load more...</button>
+
 
     </div>
 </template>
@@ -47,25 +49,44 @@ import TopNews from '@/components/TopNews.vue';
 export default {
     name: "NewsApi",
     components: {
-    TopNews,
-    
-},
+        TopNews,
+
+    },
     data() {
         return {
             searchbar: '',
-            articles: []
+            articles: [],
+            companiesVisible: 3,
+
+            step: 3,
 
         }
     },
     methods: {
         onChange: _.debounce(async function () {
-            let filterdBlogs = await axios.get(`https://newsapi.org/v2/everything?q=${this.searchbar}&from=2022-08-13&sortBy=publishedAt&apiKey=ca7b8b07f01647a2a20dc31780387d53`)
 
+            let filterdBlogs = await axios.get(` https://newsapi.org/v2/everything?q=${this.searchbar}&from=2022-08-14&sortBy=publishedAt&apiKey=ca7b8b07f01647a2a20dc31780387d53`   
+)
 
             this.articles = filterdBlogs.data.articles
-        }, 500),
+            console.log(this.articles);
 
-    }
+
+
+        }, 500),
+        companiesVisibles(){
+            this.companiesVisible += this.step
+        }
+
+
+
+    },
+    computed: {
+        visibleCompanies() {
+            return this.articles.slice(0, this.companiesVisible)
+        }
+    },
+    
 }
 </script>
 
