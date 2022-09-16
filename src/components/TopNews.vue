@@ -1,63 +1,101 @@
 <template>
-    <div>
-  <div
-    id="carouselExampleIndicators"
-    class="carousel slide"
-    data-ride="carousel"
-  >
-    <ol class="carousel-indicators">
-      <div v-for="(image, index) in images" :key="index">
-        <li
-          data-target="#carouselExampleIndicators"
-          :data-slide-to="index"
-          :class="index === 0 ? 'active' : ''"
-        ></li>
-      </div>
-    </ol>
-    <div class="carousel-inner">
-      <div
-        v-for="(image, index) in images"
-        :key="index"
-        :class="index === 0 ? 'carousel-item active' : 'carousel-item'"
-      >
-        <img class="d-block w-100" :src="image" :alt="image" />
-      </div>
+  <div>
+      <transition-group name='fade' tag='div'>
+        <div>
+          <img :src="currentImg" />
+        </div>
+      </transition-group>
+      <a class="prev" @click="prev" href='#'>&#10094;</a>
+    <a class="next" @click="next" href='#'>&#10095;</a>
     </div>
-    <a
-      class="carousel-control-prev"
-      href="#carouselExampleIndicators"
-      role="button"
-      data-slide="prev"
-    >
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a
-      class="carousel-control-next"
-      href="#carouselExampleIndicators"
-      role="button"
-      data-slide="next"
-    >
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
-  </div>
-  </div>
-</template>
+  </template>
+  
+  <script>
+  export default {
+    name: 'TopNews',
+    data() {
+      return {
+        images: [
+          'https://cdn.pixabay.com/photo/2015/12/12/15/24/amsterdam-1089646_1280.jpg',
+          'https://cdn.pixabay.com/photo/2016/02/17/23/03/usa-1206240_1280.jpg',
+          'https://cdn.pixabay.com/photo/2016/12/04/19/30/berlin-cathedral-1882397_1280.jpg'
+          ],
+        timer: null,
+        currentIndex: 0,
+      }
+    },
+    
+      mounted() {
+        this.startSlide();
+      },
+    
+      methods: {
+        startSlide() {
+          this.timer = setInterval(this.next, 4000);
+        },
 
-<script>
-export default {
-  data() {
-    return {
-      images: [
-        "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-        "https://images.ctfassets.net/hrltx12pl8hq/euxCffMOPuxAnPLcN3nzW/eb14f1deaa1e6edce8981124825aefb9/ULOHP.png?fit=fill&w=800&h=400",
-        "https://images.ctfassets.net/hrltx12pl8hq/3MbF54EhWUhsXunc5Keueb/60774fbbff86e6bf6776f1e17a8016b4/04-nature_721703848.jpg?fit=fill&w=480&h=270",
-        "https://ichef.bbci.co.uk/news/976/cpsprodpb/1572B/production/_88615878_976x1024n0037151.jpg",
-        "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-        "https://media.istockphoto.com/photos/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-picture-id1093110112?k=20&m=1093110112&s=612x612&w=0&h=3OhKOpvzOSJgwThQmGhshfOnZTvMExZX2R91jNNStBY=",
-      ],
-    };
-  },
-};
-</script>
+        next() {
+          this.currentIndex += 1
+          
+        },
+        prev() {
+          this.currentIndex -= 1
+        }
+      },
+    
+      computed: {
+        currentImg() {
+          console.log(Math.abs(this.currentIndex) % this.images.length);
+          return this.images[Math.abs(this.currentIndex) % this.images.length];
+        }
+      }
+    
+  }
+  </script>
+  
+  <style>
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: all 0.9s ease;
+    overflow: hidden;
+    visibility: visible;
+    position: absolute;
+    width:100%;
+    opacity: 1;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    visibility: hidden;
+    width:100%;
+    opacity: 0;
+  }
+  img {
+  height:600px;
+  width:100%
+    }
+  .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 40%;
+    width: auto;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.7s ease;
+    border-radius: 0 4px 4px 0;
+    text-decoration: none;
+    user-select: none;
+  }
+  /* Position the "next button" to the right */
+  .next {
+    right: 0;
+  }
+  .prev {
+    left: 0;
+  }
+  /* On hover, add a black background color with a little bit see-through */
+  .prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.9);
+  }
+  </style>

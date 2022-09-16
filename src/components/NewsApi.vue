@@ -65,8 +65,9 @@ export default {
     methods: {
         onChange: _.debounce(async function () {
 
-            let filterdBlogs = await axios.get(` https://newsapi.org/v2/everything?q=${this.searchbar}&from=2022-08-14&sortBy=publishedAt&apiKey=ca7b8b07f01647a2a20dc31780387d53`   
-)
+            let filterdBlogs = await axios.get(`https://newsapi.org/v2/everything?q=${this.searchbar}&from=2022-08-16&sortBy=publishedAt&apiKey=ca7b8b07f01647a2a20dc31780387d53`
+            )
+
 
             this.articles = filterdBlogs.data.articles
             console.log(this.articles);
@@ -74,7 +75,7 @@ export default {
 
 
         }, 500),
-        companiesVisibles(){
+        companiesVisibles() {
             this.companiesVisible += this.step
         }
 
@@ -86,7 +87,7 @@ export default {
             return this.articles.slice(0, this.companiesVisible)
         }
     },
-    
+
 }
 </script>
 

@@ -13,8 +13,10 @@
     "core-js": "^3.8.3",
     "jquery": "^3.6.1",
     "popper.js": "^1.16.1",
+    "swiper": "^8.3.2",
     "vue": "^3.2.13",
-    "vue-debounce": "^4.0.0"
+    "vue-debounce": "^4.0.0",
+    "vue3-carousel": "^0.1.46"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
