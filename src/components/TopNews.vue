@@ -1,6 +1,7 @@
 <template>
   <div>
-      <transition-group name='fade' tag='div'>
+      <transition-group name='cross' 
+      tag='div'>
         <div>
           <img :src="currentImg" />
         </div>
