@@ -33,8 +33,9 @@
 
             </div>
         </div>
-        <button @click="companiesVisibles" v-if="companiesVisible < articles.length">Load more...</button>
-
+        <div>
+            <button @click="companiesVisibles" v-if="companiesVisible < articles.length">Load more...</button>
+        </div>
 
     </div>
 </template>
@@ -68,7 +69,7 @@ export default {
             let filterdBlogs = await axios.get(`https://newsapi.org/v2/everything?q=${this.searchbar}&from=2022-08-16&sortBy=publishedAt&apiKey=ca7b8b07f01647a2a20dc31780387d53`
             )
 
-
+            console.log(filterdBlogs)
             this.articles = filterdBlogs.data.articles
             console.log(this.articles);
 
