@@ -33,9 +33,8 @@
 
             </div>
         </div>
-        <div>
-            <button @click="companiesVisibles" v-if="companiesVisible < articles.length">Load more...</button>
-        </div>
+        <button @click="companiesVisibles" v-if="companiesVisible < articles.length">Load more...</button>
+
 
     </div>
 </template>
@@ -58,26 +57,25 @@ export default {
             searchbar: '',
             articles: [],
             companiesVisible: 3,
-
-            step: 3,
+            page: 1,
+            step: 12,
 
         }
     },
     methods: {
         onChange: _.debounce(async function () {
-
-            let filterdBlogs = await axios.get(`https://newsapi.org/v2/everything?q=${this.searchbar}&from=2022-08-16&sortBy=publishedAt&apiKey=ca7b8b07f01647a2a20dc31780387d53`
-            )
-
-            console.log(filterdBlogs)
-            this.articles = filterdBlogs.data.articles
-            console.log(this.articles);
+            let filterdBlogs = await axios.get(`https://newsapi.org/v2/everything?q=${this.searchbar}&from=2022-09-18&to=2022-09-18&sortBy=popularity&apiKey=0f80812dcfb24285a71323c8971c1fd8&pageSize=${this.step}&page=${this.page}I`)
+            this.articles = filterdBlogs.data.articles;
+            }, 500),
 
 
 
-        }, 500),
-        companiesVisibles() {
-            this.companiesVisible += this.step
+        async companiesVisibles() {
+            this.page = this.page + 1
+            let filterdBlogs = await axios.get(`https://newsapi.org/v2/everything?q=${this.searchbar}&from=2022-09-18&to=2022-09-18&sortBy=popularity&apiKey=0f80812dcfb24285a71323c8971c1fd8&pageSize=${this.step}&page=${this.page}`)
+            filterdBlogs.data.articles.filter((value) => {
+                this.articles.push(value)
+            })     
         }
 
 
@@ -85,7 +83,9 @@ export default {
     },
     computed: {
         visibleCompanies() {
-            return this.articles.slice(0, this.companiesVisible)
+            return this.articles
+
+
         }
     },
 
